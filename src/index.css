@@ -1,0 +1,119 @@
+:root {
+  /* Base Colors */
+  --color-black: #0a0906;
+  --color-deep: #111008;
+
+  /* Gold accents — the soul of the museum */
+  --color-gold: #c9a84c;
+  --color-gold-soft: #d4b483;
+  --color-gold-dim: #7a5f2a;
+
+  /* Warm whites for text */
+  --color-cream: #f5ead8;
+  --color-cream-dim: #9c8a72;
+
+  /* Hall-specific lighting */
+  --hall0-bg: #0a0906;          /* pure dark */
+  --hall1-bg: #0d0b08;          /* warm dark */
+  --hall2-bg: #100d07;          /* golden dark */
+  --hall3-bg: #0d1018;          /* cooler, future-toned dark */
+  --final-bg: #080706;          /* deepest dark */
+
+  /* Spotlight glow */
+  --spotlight-color: rgba(201, 168, 76, 0.15);
+
+  /* Mobile units */
+  --hall-height: 100svh;
+  --photo-width: 85vw;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-black);
+  color: var(--color-cream);
+  margin: 0;
+  overflow-x: hidden;
+  font-family: 'Cormorant Garamond', serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide Scrollbar for clean immersive museum experience */
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Spotlight Styles */
+.spotlight-frame {
+  position: relative;
+}
+
+.spotlight-frame::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--color-gold-dim));
+}
+
+.spotlight-frame::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(ellipse at 50% 0%, var(--spotlight-color) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Typography styles */
+.font-tamil {
+  font-family: 'Noto Serif Tamil', serif;
+}
+
+.font-english {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Lenis scroll styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overflow: clip;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
