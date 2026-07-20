@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import { useMuseumStore } from '../../store/museumStore';
 import { DustParticles } from '../shared/DustParticles';
+import h2Letter from '../../assets/handwriting/Hall 2/Hall 2 Letter.jpg';
+import h4Page1 from '../../assets/handwriting/Hall 4/Hall 4 Letter 1.1.jpg';
+import h4Page2 from '../../assets/handwriting/Hall 4/Hall 4 Letter 1.2.jpg';
+import h4Page3 from '../../assets/handwriting/Hall 4/Hall 4 Letter 1.3.jpg';
+import h4Page4 from '../../assets/handwriting/Hall 4/Hall 4 Letter 1.4.jpg';
 
 export function Entrance({ onEnter }) {
   const [step, setStep] = useState(0);
@@ -12,13 +17,15 @@ export function Entrance({ onEnter }) {
 
 
   useEffect(() => {
-    // Attempt to start BGM immediately on mount
-    startBGM();
-
     // Preload heavy museum assets in the background immediately on mount
     const imageUrls = [
       'photos/museum_exterior.png',
-      ...Array.from({ length: 16 }, (_, i) => `photos/Kani/${i + 1}.jpg`)
+      ...Array.from({ length: 16 }, (_, i) => `photos/Kani/${i + 1}.jpg`),
+      h2Letter,
+      h4Page1,
+      h4Page2,
+      h4Page3,
+      h4Page4
     ];
     imageUrls.forEach((url) => {
       const img = new Image();
@@ -46,18 +53,14 @@ export function Entrance({ onEnter }) {
       clearTimeout(t3);
       clearTimeout(t4);
     };
-  }, [startBGM]);
-
-  // Trigger BGM programmatically as soon as the name "KANIMOZHI" appears
-  useEffect(() => {
-    if (step === 3) {
-      startBGM();
-    }
-  }, [step, startBGM]);
+  }, []);
 
   // Global user interaction listener to bypass browser audio autoplay restrictions
   useEffect(() => {
     const playOnInteraction = () => {
+      if (typeof Howler !== 'undefined' && Howler.ctx && Howler.ctx.state === 'suspended') {
+        Howler.ctx.resume().catch(() => {});
+      }
       startBGM();
       window.removeEventListener('click', playOnInteraction);
       window.removeEventListener('touchstart', playOnInteraction);
@@ -86,6 +89,9 @@ export function Entrance({ onEnter }) {
     setEntering(true);
 
     // Make sure BGM is playing
+    if (typeof Howler !== 'undefined' && Howler.ctx && Howler.ctx.state === 'suspended') {
+      Howler.ctx.resume().catch(() => {});
+    }
     startBGM();
 
     // Navigate to Hall 1 after 3s

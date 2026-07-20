@@ -1,14 +1,12 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from 'lenis';
 import { useMuseumStore } from './store/museumStore';
 import { Entrance } from './components/Entrance';
-
-// Lazy loading other halls to optimize performance
-const Hall1_Memories = lazy(() => import('./components/Hall1_Memories'));
-const Hall2_Letters = lazy(() => import('./components/Hall2_Letters'));
-const Hall3_Future = lazy(() => import('./components/Hall3_Future'));
-const FinalHall = lazy(() => import('./components/FinalHall'));
+import Hall1_Memories from './components/Hall1_Memories';
+import Hall2_Letters from './components/Hall2_Letters';
+import Hall3_Future from './components/Hall3_Future';
+import FinalHall from './components/FinalHall';
 
 export function App() {
   const currentHall = useMuseumStore((state) => state.currentHall);
@@ -72,9 +70,7 @@ export function App() {
             transition={{ duration: 1.5, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <Suspense fallback={null}>
-              <Hall1_Memories onComplete={() => setHall(2)} />
-            </Suspense>
+            <Hall1_Memories onComplete={() => setHall(2)} />
           </motion.div>
         );
       case 2:
@@ -87,9 +83,7 @@ export function App() {
             transition={{ duration: 1.5, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <Suspense fallback={null}>
-              <Hall2_Letters onComplete={() => setHall(3)} />
-            </Suspense>
+            <Hall2_Letters onComplete={() => setHall(3)} />
           </motion.div>
         );
       case 3:
@@ -102,9 +96,7 @@ export function App() {
             transition={{ duration: 1.5, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <Suspense fallback={null}>
-              <Hall3_Future onComplete={() => setHall(4)} />
-            </Suspense>
+            <Hall3_Future onComplete={() => setHall(4)} />
           </motion.div>
         );
       case 4:
@@ -117,9 +109,7 @@ export function App() {
             transition={{ duration: 1.5, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <Suspense fallback={null}>
-              <FinalHall />
-            </Suspense>
+            <FinalHall />
           </motion.div>
         );
       default:
