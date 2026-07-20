@@ -613,50 +613,50 @@ export function FinalHall() {
                       alt={`final letter page ${currentSlide + 1}`}
                     />
                   </AnimatePresence>
+                </div>
 
-                  {/* Tap to open overlay (identical to Hall 2) */}
-                  <AnimatePresence>
-                    {phase === 'letter-closed' && (
-                      <motion.div
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
+                {/* Tap to open overlay (identical to Hall 2) */}
+                <AnimatePresence>
+                  {phase === 'letter-closed' && (
+                    <motion.div
+                      initial={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'rgba(16, 13, 7, 0.4)',
+                        borderRadius: 4,
+                        zIndex: 10
+                      }}
+                    >
+                      <motion.span
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 2.0, repeat: Infinity, ease: 'easeInOut' }}
                         style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          backgroundColor: 'rgba(16, 13, 7, 0.4)',
-                          borderRadius: 4,
-                          zIndex: 10
+                          fontFamily: 'Cormorant Garamond',
+                          fontSize: 12,
+                          fontStyle: 'italic',
+                          color: 'var(--color-gold-soft)',
+                          letterSpacing: '2px',
+                          textTransform: 'uppercase',
+                          border: '1px solid rgba(201,168,76,0.3)',
+                          padding: '8px 16px',
+                          borderRadius: 2,
+                          backgroundColor: 'rgba(16, 13, 7, 0.8)'
                         }}
                       >
-                        <motion.span
-                          animate={{ opacity: [0.4, 1, 0.4] }}
-                          transition={{ duration: 2.0, repeat: Infinity, ease: 'easeInOut' }}
-                          style={{
-                            fontFamily: 'Cormorant Garamond',
-                            fontSize: 12,
-                            fontStyle: 'italic',
-                            color: 'var(--color-gold-soft)',
-                            letterSpacing: '2px',
-                            textTransform: 'uppercase',
-                            border: '1px solid rgba(201,168,76,0.3)',
-                            padding: '8px 16px',
-                            borderRadius: 2,
-                            backgroundColor: 'rgba(16, 13, 7, 0.8)'
-                          }}
-                        >
-                          Tap to open
-                        </motion.span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                        Tap to open
+                      </motion.span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             </div>
 
