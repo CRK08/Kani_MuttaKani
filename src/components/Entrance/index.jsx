@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Howl } from 'howler';
 import { useMuseumStore } from '../../store/museumStore';
 import { DustParticles } from '../shared/DustParticles';
-import logoImg from '../../assets/logo.jpeg';
 
 export function Entrance({ onEnter }) {
   const [step, setStep] = useState(0);
@@ -18,8 +17,8 @@ export function Entrance({ onEnter }) {
 
     // Preload heavy museum assets in the background immediately on mount
     const imageUrls = [
-      '/photos/museum_exterior.png',
-      ...Array.from({ length: 16 }, (_, i) => `/photos/Kani/${i + 1}.jpg`)
+      'photos/museum_exterior.png',
+      ...Array.from({ length: 16 }, (_, i) => `photos/Kani/${i + 1}.jpg`)
     ];
     imageUrls.forEach((url) => {
       const img = new Image();
@@ -242,7 +241,7 @@ export function Entrance({ onEnter }) {
                 left: 0,
                 width: '100%',
                 height: '100%',
-                backgroundImage: 'url(/photos/museum_exterior.png)',
+                backgroundImage: 'url(photos/museum_exterior.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
@@ -258,26 +257,6 @@ export function Entrance({ onEnter }) {
               background: 'radial-gradient(circle, transparent 20%, #0a0906 100%)',
               pointerEvents: 'none'
             }} />
-
-            {/* Site Logo */}
-            <motion.img
-              src={logoImg}
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 0.85, y: 0, scale: 1 }}
-              transition={{ delay: 0.6, duration: 1.6, ease: 'easeOut' }}
-              style={{
-                position: 'absolute',
-                top: '8%',
-                width: 75,
-                height: 75,
-                borderRadius: '50%',
-                border: '1.5px solid rgba(201, 168, 76, 0.45)',
-                boxShadow: '0 0 20px rgba(201, 168, 76, 0.25)',
-                objectFit: 'cover',
-                zIndex: 3
-              }}
-              alt="Museum Logo"
-            />
 
             {/* Enter Button Panel */}
             <motion.div

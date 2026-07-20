@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
     bgm = window.__bgmInstance;
   } else {
     bgm = new Howl({
-      src: ['/audio/bgm.mp3'],
+      src: ['audio/bgm.mp3'],
       loop: true,
       volume: 0.25,
       preload: true,

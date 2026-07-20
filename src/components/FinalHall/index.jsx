@@ -13,7 +13,7 @@ const h4Slides = [h4Page1, h4Page2, h4Page3, h4Page4];
 
 // Continuous Falling Fragments Sub-component (Sinking into the Center in spiral circular paths)
 function FallingFragments() {
-  const photoPool = Array.from({ length: 16 }, (_, i) => `/photos/Kani/${i + 1}.jpg`);
+  const photoPool = Array.from({ length: 16 }, (_, i) => `photos/Kani/${i + 1}.jpg`);
 
   const createFragment = (id) => {
     const keyframesCount = 15;
@@ -138,10 +138,10 @@ function FallingFragments() {
 // Scattered Blurred Photo Collage Background Sub-component
 function BlurredPhotoCollage() {
   const images = [
-    { src: '/photos/Kani/5.jpg', top: '10%', left: '-5%', rot: -15, scale: 1.35, blur: 14, opacity: 0.22 },
-    { src: '/photos/Kani/6.jpg', bottom: '8%', right: '-8%', rot: 22, scale: 1.45, blur: 16, opacity: 0.18 },
-    { src: '/photos/Kani/7.jpg', top: '-5%', right: '-5%', rot: 12, scale: 1.25, blur: 12, opacity: 0.18 },
-    { src: '/photos/Kani/8.jpg', bottom: '15%', left: '-8%', rot: -24, scale: 1.5, blur: 15, opacity: 0.22 }
+    { src: 'photos/Kani/5.jpg', top: '10%', left: '-5%', rot: -15, scale: 1.35, blur: 14, opacity: 0.22 },
+    { src: 'photos/Kani/6.jpg', bottom: '8%', right: '-8%', rot: 22, scale: 1.45, blur: 16, opacity: 0.18 },
+    { src: 'photos/Kani/7.jpg', top: '-5%', right: '-5%', rot: 12, scale: 1.25, blur: 12, opacity: 0.18 },
+    { src: 'photos/Kani/8.jpg', bottom: '15%', left: '-8%', rot: -24, scale: 1.5, blur: 15, opacity: 0.22 }
   ];
 
   return (
@@ -292,13 +292,14 @@ function SignatureReveal({ onComplete, forceComplete = false }) {
 export function FinalHall() {
   const setHall = useMuseumStore((state) => state.setHall);
   
-  // Phases: 'falling' -> 'orb' -> 'transitioning-to-letter' -> 'letter-reveal' -> 'letter-view' -> 'nib-animation' -> 'signature-reveal'
+  // Phases: 'falling' -> 'orb' -> 'transitioning-to-letter' -> 'letter-closed' -> 'letter-reveal' -> 'letter-view'
   const [phase, setPhase] = useState('falling');
   const [isOrbTapped, setIsOrbTapped] = useState(false);
-  const [signatureDone, setSignatureDone] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideDirection, setSlideDirection] = useState(0);
   const [signatureTriggered, setSignatureTriggered] = useState(false);
+  const [showNib, setShowNib] = useState(false);
+  const [showSignature, setShowSignature] = useState(false);
 
   useEffect(() => {
     setHall(4);
@@ -318,8 +319,13 @@ export function FinalHall() {
     setPhase('transitioning-to-letter');
 
     setTimeout(() => {
-      setPhase('letter-reveal');
+      setPhase('letter-closed');
     }, 1500);
+  };
+
+  const handleOpenLetter = () => {
+    if (phase !== 'letter-closed') return;
+    setPhase('letter-reveal');
   };
 
   const handleLetterRevealComplete = () => {
@@ -327,7 +333,7 @@ export function FinalHall() {
   };
 
   const handleSignatureComplete = () => {
-    setSignatureDone(true);
+    // Signature completes, experience stays active
   };
 
   useEffect(() => {
@@ -343,9 +349,10 @@ export function FinalHall() {
   useEffect(() => {
     if (phase === 'letter-view' && currentSlide === 3 && !signatureTriggered) {
       setSignatureTriggered(true);
-      setPhase('nib-animation');
+      setShowNib(true);
       setTimeout(() => {
-        setPhase('signature-reveal');
+        setShowNib(false);
+        setShowSignature(true);
       }, 1200);
     }
   }, [phase, currentSlide, signatureTriggered]);
@@ -493,7 +500,7 @@ export function FinalHall() {
         )}
 
         {/* Phases 4+: The Letter Card and Signature View */}
-        {['letter-reveal', 'letter-view', 'nib-animation', 'signature-reveal'].includes(phase) && (
+        {['letter-closed', 'letter-reveal', 'letter-view', 'nib-animation', 'signature-reveal'].includes(phase) && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
             
             {/* Persistent Letter Container (Prevents Flickers/Re-mounts) */}
@@ -522,13 +529,7 @@ export function FinalHall() {
 
               {/* Glass Display Case frame style matching Hall 2 */}
               <motion.div
-                initial={phase === 'letter-reveal' ? { clipPath: 'circle(0% at 50% 50%)', scale: 0.90, rotate: -3 } : { clipPath: 'circle(120% at 50% 50%)', scale: 1, rotate: 0 }}
-                animate={phase === 'letter-reveal' ? { clipPath: 'circle(120% at 50% 50%)', scale: 1, rotate: 0 } : {}}
-                transition={{
-                  clipPath: { duration: 4.5, ease: 'easeOut' },
-                  scale: { duration: 4.5, ease: 'easeOut' },
-                  rotate: { duration: 4.5, ease: 'easeOut' }
-                }}
+                onClick={handleOpenLetter}
                 style={{
                   width: 'var(--photo-width)',
                   backgroundColor: 'rgba(16, 13, 7, 0.75)',
@@ -541,7 +542,10 @@ export function FinalHall() {
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 16,
-                  boxShadow: 'inset 0 0 40px rgba(201,168,76,0.15), 0 10px 40px rgba(201,168,76,0.1)'
+                  cursor: phase === 'letter-closed' ? 'pointer' : (phase === 'letter-view' ? 'grab' : 'default'),
+                  boxShadow: phase === 'letter-closed'
+                    ? 'inset 0 0 20px rgba(201,168,76,0.03), 0 4px 20px rgba(0,0,0,0.3)'
+                    : 'inset 0 0 40px rgba(201,168,76,0.15), 0 10px 40px rgba(201,168,76,0.1)'
                 }}
               >
                 {/* Spotlighting gradient inside case */}
@@ -562,7 +566,9 @@ export function FinalHall() {
                   width: '100%', 
                   overflow: 'hidden', 
                   borderRadius: 4,
-                  cursor: phase === 'letter-view' ? 'grab' : 'default'
+                  aspectRatio: '3/4.2', // Fixed aspect ratio prevents layout shift/jump when sliding
+                  filter: phase === 'letter-closed' ? 'blur(6px)' : 'none',
+                  transition: 'filter 1.5s ease-out'
                 }}>
                   <AnimatePresence initial={false} custom={slideDirection}>
                     <motion.img
@@ -574,6 +580,13 @@ export function FinalHall() {
                       dragConstraints={{ left: 0, right: 0 }}
                       dragElastic={0.5}
                       onDragEnd={handleDragEnd}
+                      initial={phase === 'letter-reveal' ? { clipPath: 'circle(0% at 50% 50%)', scale: 0.90, rotate: -3 } : { clipPath: 'circle(120% at 50% 50%)', scale: 1, rotate: 0 }}
+                      animate={phase === 'letter-reveal' ? { clipPath: 'circle(120% at 50% 50%)', scale: 1, rotate: 0 } : {}}
+                      transition={{
+                        clipPath: { duration: 4.5, ease: 'easeOut' },
+                        scale: { duration: 4.5, ease: 'easeOut' },
+                        rotate: { duration: 4.5, ease: 'easeOut' }
+                      }}
                       variants={{
                         enter: (dir) => ({
                           x: dir > 0 ? '100%' : dir < 0 ? '-100%' : 0,
@@ -588,20 +601,60 @@ export function FinalHall() {
                           opacity: 0
                         })
                       }}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{
-                        x: { type: 'spring', stiffness: 300, damping: 30 },
-                        opacity: { duration: 0.35 }
-                      }}
                       style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
                         width: '100%',
-                        display: 'block',
+                        height: '100%',
+                        objectFit: 'contain',
                         borderRadius: 4
                       }}
                       alt={`final letter page ${currentSlide + 1}`}
                     />
+                  </AnimatePresence>
+
+                  {/* Tap to open overlay (identical to Hall 2) */}
+                  <AnimatePresence>
+                    {phase === 'letter-closed' && (
+                      <motion.div
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: 'rgba(16, 13, 7, 0.4)',
+                          borderRadius: 4,
+                          zIndex: 10
+                        }}
+                      >
+                        <motion.span
+                          animate={{ opacity: [0.4, 1, 0.4] }}
+                          transition={{ duration: 2.0, repeat: Infinity, ease: 'easeInOut' }}
+                          style={{
+                            fontFamily: 'Cormorant Garamond',
+                            fontSize: 12,
+                            fontStyle: 'italic',
+                            color: 'var(--color-gold-soft)',
+                            letterSpacing: '2px',
+                            textTransform: 'uppercase',
+                            border: '1px solid rgba(201,168,76,0.3)',
+                            padding: '8px 16px',
+                            borderRadius: 2,
+                            backgroundColor: 'rgba(16, 13, 7, 0.8)'
+                          }}
+                        >
+                          Tap to open
+                        </motion.span>
+                      </motion.div>
+                    )}
                   </AnimatePresence>
                 </div>
               </motion.div>
@@ -627,7 +680,7 @@ export function FinalHall() {
             )}
 
             {/* Phase 4b: Pen nib dot indicator */}
-            {phase === 'nib-animation' && (
+            {showNib && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 0.5] }}
@@ -644,7 +697,7 @@ export function FinalHall() {
             )}
 
             {/* Signature Tracing */}
-            {['signature-reveal'].includes(phase) && (
+            {showSignature && (
               <div style={{ width: '100%', marginTop: 12 }}>
                 <SignatureReveal 
                   onComplete={handleSignatureComplete} 
