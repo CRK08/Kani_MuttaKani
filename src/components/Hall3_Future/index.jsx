@@ -15,8 +15,8 @@ function FutureFrame({ title, originalTitle, message, messageTamil, onOpened, is
       onClick={handleTap}
       animate={{
         borderColor: isOpen ? 'var(--color-gold)' : 'rgba(201, 168, 76, 0.4)',
-        boxShadow: isOpen 
-          ? '0 8px 30px rgba(201, 168, 76, 0.12), inset 0 0 20px rgba(201,168,76,0.05)' 
+        boxShadow: isOpen
+          ? '0 8px 30px rgba(201, 168, 76, 0.12), inset 0 0 20px rgba(201,168,76,0.05)'
           : '0 4px 12px rgba(0,0,0,0.4), inset 0 0 0px rgba(0,0,0,0)'
       }}
       transition={{ duration: 0.6 }}
@@ -67,25 +67,15 @@ function FutureFrame({ title, originalTitle, message, messageTamil, onOpened, is
 
       {!isOpen ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-          <h3 style={{
-            fontFamily: 'Cormorant Garamond',
+          <h3 className="font-tamil" style={{
+            fontSize: 15,
             fontWeight: 400,
-            fontSize: 16,
             color: 'var(--color-gold-soft)',
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-            textAlign: 'center'
-          }}>
-            {originalTitle}
-          </h3>
-          <span className="font-tamil" style={{
-            fontSize: 11,
-            color: 'var(--color-cream-dim)',
-            opacity: 0.7,
+            letterSpacing: 1,
             textAlign: 'center'
           }}>
             {title}
-          </span>
+          </h3>
           <span style={{
             fontFamily: 'Cormorant Garamond',
             fontSize: 10,
@@ -110,17 +100,8 @@ function FutureFrame({ title, originalTitle, message, messageTamil, onOpened, is
             gap: 10
           }}
         >
-          <p style={{
-            fontFamily: 'Cormorant Garamond',
-            fontSize: 15,
-            color: 'var(--color-cream)',
-            lineHeight: 1.5,
-            fontStyle: 'italic'
-          }}>
-            "{message}"
-          </p>
           <p className="font-tamil" style={{
-            fontSize: 12,
+            fontSize: 13,
             color: 'var(--color-cream)',
             lineHeight: 1.6
           }}>
@@ -150,22 +131,16 @@ export function Hall3_Future({ onComplete }) {
 
   const framesData = [
     {
-      originalTitle: "Future Achievement",
       title: "வருங்கால சாதனை",
-      message: "You will stand at the pinnacle of your career, leading with the grace and brilliance that only you possess.",
-      messageTamil: "உனக்கே உரிய கண்ணியத்துடனும் திறமையுடனும் உன் துறையின் உச்சியில் நீ நிற்பாய்."
+      messageTamil: "இங்க இன்னும் எதுவும் எழுதல... ஏன்னா, உன்னோட மிகப் பெரிய சாதனைக்கு இன்னும் இடம் விட்டு வச்சிருக்கேன். அந்த நாள் தூரத்துல இல்ல. 🌸"
     },
     {
-      originalTitle: "Dream Yet To Be Reached",
       title: "இன்னும் எட்டப்படாத கனவு",
-      message: "No dream is too distant, and no peak is too high. Every step you take today is bringing you closer to your destiny.",
-      messageTamil: "எந்தக் கனவும் தூரமில்லை, எந்த சிகரமும் உயரமில்லை. நீ எடுக்கும் ஒவ்வொரு அடியும் உன்னை இலக்கை நோக்கி அழைத்துச் செல்கிறது."
+      messageTamil: "சில கனவுகள் சீக்கிரம் நனவாகாது... அதனால அவை சிறியதாயும் மாறாது. ஒருநாள்... நீ அடைய நினைத்த வானத்தைத் தொட்டபோது, காத்திருந்த ஒவ்வொரு நாளும் அழகாகத் தோன்றும். ❤️"
     },
     {
-      originalTitle: "A Story Still Being Written",
       title: "இன்னும் எழுதப்படும் கதை",
-      message: "Your story is a masterpiece in progress. Embrace every moment, and never forget how incredibly capable you are.",
-      messageTamil: "உன் கதை எழுதப்பட்டுக் கொண்டிருக்கும் ஒரு காவியம். உன்னால் முடியும் என்பதை எப்போதும் மறந்துவிடாதே."
+      messageTamil: "இதுவரை நீ கடந்துவந்த ஒவ்வொரு அத்தியாயமும் அழகுதான்... ஆனா, இனிமேல் நீ எழுதப் போற அத்தியாயங்கள்தான் பேரழகு. உன்னோட சிறந்த கதை... இன்னும் தொடங்கவே இல்ல. ❤️"
     }
   ];
   return (
@@ -334,7 +309,7 @@ export function Hall3_Future({ onComplete }) {
         width: '100%'
       }}>
         <div style={{ width: 60, height: 1, backgroundColor: 'rgba(160, 180, 212, 0.4)', marginBottom: 30 }} />
-        
+
         <motion.button
           onClick={onComplete}
           whileTap={{ scale: 0.96 }}
