@@ -13,22 +13,28 @@ export function App() {
   const setHall = useMuseumStore((state) => state.setHall);
 
   useEffect(() => {
-    // 1. Initialize Lenis scroll for a premium cinematic inertia feel
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.2
-    });
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    let lenis = null;
+    if (!isTouchDevice) {
+      // 1. Initialize Lenis scroll for a premium cinematic inertia feel (desktop only)
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.0
+      });
 
-    function raf(time) {
-      lenis.raf(time);
+      function raf(time) {
+        if (lenis) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+      }
       requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
 
     // 2. Lock context menus and default select highlights to protect immersion
     const handleContextMenu = (e) => e.preventDefault();
@@ -40,7 +46,9 @@ export function App() {
     }
 
     return () => {
-      lenis.destroy();
+      if (lenis) {
+        lenis.destroy();
+      }
       document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
