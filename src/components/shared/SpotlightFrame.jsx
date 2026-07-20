@@ -3,11 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Howl } from 'howler';
 
 export function SpotlightFrame({ photo, title, story, storyTamil, voiceSrc, onTap, hideHeading, expanded: expandedProp }) {
+  const [isTouch, setIsTouch] = useState(false);
   const [localExpanded, setLocalExpanded] = useState(false);
   const isExpanded = expandedProp !== undefined ? expandedProp : localExpanded;
 
   const soundRef = useRef(null);
   const synthRef = useRef(null);
+
+  useEffect(() => {
+    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   // Triggered when voice notes fail to load/play - simulates narration with a gentle warm pad chord
   const playFallbackSynth = () => {
@@ -105,41 +110,39 @@ export function SpotlightFrame({ photo, title, story, storyTamil, voiceSrc, onTa
   return (
     <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       
-      {/* Blurred background glow behind the card */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0,
-        filter: 'blur(28px)',
-        transform: isExpanded ? 'scale(1.16)' : 'scale(1.05)',
-        opacity: isExpanded ? 0.55 : 0.28,
-        transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
-        pointerEvents: 'none'
-      }}>
-        <img
-          src={photo}
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: 4
-          }}
-        />
-      </div>
+      {/* Blurred background glow behind the card (hidden on touchscreens for butter-smooth mobile FPS) */}
+      {!isTouch && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          filter: 'blur(28px)',
+          transform: isExpanded ? 'scale(1.16)' : 'scale(1.05)',
+          opacity: isExpanded ? 0.55 : 0.28,
+          transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+          pointerEvents: 'none'
+        }}>
+          <img
+            src={photo}
+            alt=""
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: 4
+            }}
+          />
+        </div>
+      )}
 
       {/* Main card */}
       <motion.div
         onClick={handleTap}
-        animate={isExpanded ? { scale: 1.03 } : { scale: [1, 1.004, 1] }}
-        transition={
-          isExpanded
-            ? { duration: 0.4, ease: 'easeOut' }
-            : { scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }
-        }
+        animate={isExpanded ? { scale: 1.03 } : { scale: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         style={{
           width: 'fit-content',
           maxWidth: 'var(--photo-width)',
