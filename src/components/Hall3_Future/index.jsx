@@ -216,15 +216,6 @@ export function Hall3_Future({ onComplete }) {
         flexDirection: 'column',
         gap: 8
       }}>
-        <p style={{
-          fontFamily: 'Cormorant Garamond',
-          fontStyle: 'italic',
-          fontSize: 16,
-          color: 'var(--color-cream-dim)',
-          lineHeight: 1.5
-        }}>
-          "Some frames are empty. Not because the story hasn't happened. Because it's still being written."
-        </p>
         <p className="font-tamil" style={{
           fontSize: 13,
           color: 'rgba(160, 180, 212, 0.65)',
